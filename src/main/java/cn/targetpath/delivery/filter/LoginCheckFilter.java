@@ -40,13 +40,14 @@ public class LoginCheckFilter implements Filter {
         String[] urls = new String[]{
                 "/employee/login",
                 "/employee/logout",
-                "/backend/page/login/**",
-                "/backend/api/**",
-                "/backend/images/**",
-                "/backend/js/**",
-                "/backend/plugins/**",
-                "/backend/styles/**",
-                "/backend/favicon.ico",
+//                "/backend/page/login/**",
+//                "/backend/api/**",
+//                "/backend/images/**",
+//                "/backend/js/**",
+//                "/backend/plugins/**",
+//                "/backend/styles/**",
+//                "/backend/favicon.ico",
+                "/backend/**",
                 "/front/**"
         };
 
