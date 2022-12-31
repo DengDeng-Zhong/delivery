@@ -12,7 +12,6 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 
 /**
  * @author DengBo_Zhong
@@ -92,13 +91,6 @@ public class EmployeeController {
 
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
 
-//        employee.setCreateTime(LocalDateTime.now());
-//        employee.setUpdateTime(LocalDateTime.now());
-//
-//        Long empId = (Long) request.getSession().getAttribute("employee");
-//        employee.setCreateUser(empId);
-//        employee.setUpdateUser(empId);
-
         employeeService.save(employee);
         log.info("新增员工,员工信息{}", employee.toString());
 
@@ -136,16 +128,17 @@ public class EmployeeController {
 
     /**
      * 更新账号状态
+     *
      * @param request
      * @param employee
      * @return
      */
     @PutMapping
     public R<String> update(HttpServletRequest request, @RequestBody Employee employee) {
-        log.info("employee {}",employee);
+        log.info("employee {}", employee);
 
         long id = Thread.currentThread().getId();
-        log.info("线程ID:{}",id);
+        log.info("线程ID:{}", id);
 //        Long empId = (Long)request.getSession().getAttribute("employee");
 //
 //        employee.setUpdateUser(empId);
