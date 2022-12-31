@@ -1,5 +1,6 @@
 package cn.targetpath.delivery.filter;
 
+import cn.targetpath.delivery.common.BaseContext;
 import cn.targetpath.delivery.common.R;
 import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -66,8 +67,8 @@ public class LoginCheckFilter implements Filter {
         if (request.getSession().getAttribute("employee") != null) {
             log.info("用户已登录,用户ID为 {}",request.getSession().getAttribute("employee"));
 
-            long id = Thread.currentThread().getId();
-            log.info("线程ID:{}",id);
+            Long empId = (Long) request.getSession().getAttribute("employee");
+            BaseContext.setCurrentId(empId);
             filterChain.doFilter(request, response);
             return;
         }
