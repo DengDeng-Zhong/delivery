@@ -44,7 +44,7 @@ public class CommonController {
         }
 
         try {
-            file.transferTo(new File(basePath+ suffix));
+            file.transferTo(new File(basePath+ fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
