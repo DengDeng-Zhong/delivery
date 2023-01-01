@@ -16,15 +16,15 @@ public class DishFlavor implements Serializable {
     private Long id;
 
 
-    //菜品id
+    /**菜品id*/
     private Long dishId;
 
 
-    //口味名称
+    /**口味名称*/
     private String name;
 
 
-    //口味数据list
+    /**口味数据list*/
     private String value;
 
 
@@ -44,7 +44,7 @@ public class DishFlavor implements Serializable {
     private Long updateUser;
 
 
-    //是否删除
+    /**是否删除*/
     private Integer isDeleted;
 
 }
