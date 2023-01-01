@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 /**
  * 套餐关系
+ * @author DengBo_Zhong
  */
 @Data
 public class SetmealDish implements Serializable {
