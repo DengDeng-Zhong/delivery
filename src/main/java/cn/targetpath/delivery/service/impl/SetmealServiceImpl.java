@@ -1,11 +1,13 @@
 package cn.targetpath.delivery.service.impl;
 
+import cn.targetpath.delivery.common.CustomException;
 import cn.targetpath.delivery.dto.SetmealDto;
 import cn.targetpath.delivery.entity.Setmeal;
 import cn.targetpath.delivery.entity.SetmealDish;
 import cn.targetpath.delivery.mapper.SetmealMapper;
 import cn.targetpath.delivery.service.SetmealDishService;
 import cn.targetpath.delivery.service.SetmealService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +41,22 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
 
         setmealDishService.saveBatch(setmealDishes);
     }
+
+    @Override
+    @Transactional
+    public void removeWithDish(List<Long> ids) {
+        LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Setmeal::getId, ids);
+        queryWrapper.eq(Setmeal::getStatus,1);
+        int count = this.count(queryWrapper);
+        if (count > 0){
+            throw new CustomException("套餐已上架,不能删除");
+        }
+        this.removeByIds(ids);
+
+        LambdaQueryWrapper<SetmealDish> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(SetmealDish::getSetmealId,ids);
+        setmealDishService.remove(wrapper);
+    }
+
 }
