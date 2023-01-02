@@ -16,10 +16,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 /**
  * 文件上传下载
+ *
  * @author DengBo_Zhong
  * @version V1.0
  * @date 2022/11/27 9:26
@@ -33,18 +37,29 @@ public class CommonController {
     private String basePath;
 
     @PostMapping("/upload")
-    public R<String> upload(MultipartFile file){
+    public R<String> upload(MultipartFile file) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String res = dateFormat.format(new Date());
+        // 原始文件名
         String originalFilename = file.getOriginalFilename();
-        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-        String fileName = UUID.randomUUID().toString() + suffix;
+        // 新的文件名
+        String fileName = res + UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
+        ;
 
-        File dir = new File(basePath);
-        if (!dir.exists()){
-            dir.mkdirs();
+        // 创建年月日文件夹
+        Calendar calendar = Calendar.getInstance();
+        File dateDirs = new File(calendar.get(Calendar.YEAR) + File.separator
+                + (calendar.get(Calendar.MONTH) + 1) + File.separator
+                + (calendar.get(Calendar.DATE)));
+        // 新文件
+        File newFile = new File(basePath + File.separator + dateDirs + File.separator + fileName);
+
+        if (!newFile.getParentFile().exists()) {
+            newFile.getParentFile().mkdirs();
         }
-
+        log.info("文件路径,{}",newFile);
         try {
-            file.transferTo(new File(basePath+ fileName));
+            file.transferTo(newFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,11 +69,12 @@ public class CommonController {
 
     /**
      * 文件下载
+     *
      * @param name
      * @param response
      */
     @GetMapping("/download")
-    public void download(String name, HttpServletResponse response){
+    public void download(String name, HttpServletResponse response) {
         try {
             FileInputStream inputStream = new FileInputStream(new File(basePath + name));
 
@@ -66,9 +82,9 @@ public class CommonController {
             response.setContentType("image/jpeg");
 
             int len = 0;
-            byte [] bytes = new byte[1024];
-            while ((len=inputStream.read(bytes))!= -1){
-                outputStream.write(bytes,0,len);
+            byte[] bytes = new byte[1024];
+            while ((len = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, len);
                 outputStream.flush();
             }
 
