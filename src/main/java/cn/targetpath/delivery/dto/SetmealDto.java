@@ -4,6 +4,8 @@ package cn.targetpath.delivery.dto;
 import cn.targetpath.delivery.entity.Setmeal;
 import cn.targetpath.delivery.entity.SetmealDish;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.List;
 
 /**
@@ -11,6 +13,7 @@ import java.util.List;
  * @version V1.0
  * @date 2022/12/10 20:40
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SetmealDto extends Setmeal {
 

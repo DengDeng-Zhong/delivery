@@ -38,28 +38,17 @@ public class CommonController {
 
     @PostMapping("/upload")
     public R<String> upload(MultipartFile file) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String res = dateFormat.format(new Date());
-        // 原始文件名
         String originalFilename = file.getOriginalFilename();
-        // 新的文件名
-        String fileName = res + UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."));
-        ;
+        String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String fileName = UUID.randomUUID().toString() + suffix;
 
-        // 创建年月日文件夹
-        Calendar calendar = Calendar.getInstance();
-        File dateDirs = new File(calendar.get(Calendar.YEAR) + File.separator
-                + (calendar.get(Calendar.MONTH) + 1) + File.separator
-                + (calendar.get(Calendar.DATE)));
-        // 新文件
-        File newFile = new File(basePath + File.separator + dateDirs + File.separator + fileName);
-
-        if (!newFile.getParentFile().exists()) {
-            newFile.getParentFile().mkdirs();
+        File dir = new File(basePath);
+        if (!dir.exists()){
+            dir.mkdirs();
         }
-        log.info("文件路径,{}",newFile);
+
         try {
-            file.transferTo(newFile);
+            file.transferTo(new File(basePath+ fileName));
         } catch (IOException e) {
             e.printStackTrace();
         }
